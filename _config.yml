@@ -13,7 +13,7 @@ title:               A Catchy Title
 tagline:             'Tom George writes stuff'
 description:         '<a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>.'
 url:                 http://tomgeorge.github.io
-baseurl:             /
+baseurl:             http://tomgeorge.github.io
 paginate:            5
 
 # About/contact
