@@ -1,0 +1,26 @@
+# Dependencies
+markdown:            redcarpet
+highlighter:         pygments
+
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+relative_permalinks: true
+
+# Setup
+title:               A Catchy Title
+tagline:             'Tom George writes stuff'
+description:         '<a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>.'
+url:                 http://tomgeorge.github.io
+baseurl:             /
+paginate:            5
+
+# About/contact
+author:
+  name:              Tom George
+  url:               https://twitter.com/RealTomGeorge
+  email:             tg82490@gmail.com
+
+# Custom vars
+version:             1.0.0
