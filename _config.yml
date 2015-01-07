@@ -10,10 +10,10 @@ relative_permalinks: true
 
 # Setup
 title:               A Catchy Title
-tagline:             'Tom George writes stuff'
+tagline:             'Tom Writes Stuff'
 description:         '<a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>.'
 url:                 http://tomgeorge.github.io
-baseurl:             http://tomgeorge.github.io
+baseurl:             /
 paginate:            5
 
 # About/contact
