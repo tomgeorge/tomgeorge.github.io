@@ -61,4 +61,7 @@ The config files for the ssh server live in `/etc/ssh/sshd` on the remote machin
 
 Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in `ssh_config` on the machine you use to connect as well.  This saves you from having to specify the port every time with `ssh -p`.
 
+To see the impact of these changes, restart ssh on the remote machine:
+
+`sudo service ssh restart`
  
