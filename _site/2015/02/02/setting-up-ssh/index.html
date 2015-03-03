@@ -11,7 +11,7 @@
 
   <title>
     
-      Tom George &middot; Tom George
+      Setting up SSH on Debian in VirtualBox &middot; Tom George
     
   </title>
 
@@ -43,7 +43,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item active" href="/">Home</a>
+    <a class="sidebar-nav-item" href="/">Home</a>
 
     
 
@@ -91,18 +91,10 @@
       </div>
 
       <div class="container content">
-        <div class="posts">
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/02/02/setting-up-ssh/">
-        Setting up SSH on Debian in VirtualBox
-      </a>
-    </h1>
-
-    <span class="post-date">02 Feb 2015</span>
-
-    <p>The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.</p>
+        <div class="post">
+  <h1 class="post-title">Setting up SSH on Debian in VirtualBox</h1>
+  <span class="post-date">02 Feb 2015</span>
+  <p>The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.</p>
 
 <p>You will need <code>openssh-server</code> on the remote machine.</p>
 
@@ -161,34 +153,23 @@
 <p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code>ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code>ssh -p</code>.</p>
 
 
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/01/06/first-post/">
-        First Post
-      </a>
-    </h1>
-
-    <span class="post-date">06 Jan 2015</span>
-
-    <p>This is my first post.  I’m mostly going to be talking about programming (I like <a href="http://clojure.org">Clojure</a>), and doing programming challenges.</p>
-
-<p>I’m a software developer at <a href="http://www.paychex.com">Paychex</a> in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET.  I work mostly in the back end on our money transmission and filing infrastructure.</p>
-
-  </div>
-  
 </div>
 
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
-    <span class="pagination-item newer">Newer</span>
-  
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="//2015/01/06/first-post/">
+            First Post
+            <small>06 Jan 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
 </div>
-
 
       </div>
     </div>

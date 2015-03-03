@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
- <title>A Catchy Title</title>
+ <title>Tom George</title>
  <link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
  <link href="http://tomgeorge.github.io/"/>
- <updated>2015-01-06T21:36:20-05:00</updated>
+ <updated>2015-03-02T23:04:21-05:00</updated>
  <id>http://tomgeorge.github.io</id>
  <author>
    <name>Tom George</name>
@@ -13,13 +13,79 @@
 
  
  <entry>
+   <title>Setting up SSH on Debian in VirtualBox</title>
+   <link href="http://tomgeorge.github.io/2015/02/02/setting-up-ssh/"/>
+   <updated>2015-02-02T00:00:00-05:00</updated>
+   <id>http://tomgeorge.github.io/2015/02/02/setting-up-ssh</id>
+   <content type="html">&lt;p&gt;The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.&lt;/p&gt;
+
+&lt;p&gt;You will need &lt;code&gt;openssh-server&lt;/code&gt; on the remote machine.&lt;/p&gt;
+
+&lt;h2 id=&quot;ssh&quot;&gt;SSH&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;SH&lt;/strong&gt;ell, fittingly, is a method that allows two machines to communicate securely over a network.  I’m sure it uses algorithms and whatever to work.  &lt;/p&gt;
+
+&lt;h2 id=&quot;public-key-authentication&quot;&gt;Public key authentication&lt;/h2&gt;
+
+&lt;p&gt;Public key authentication is a pretty simple concept that took me like a year to figure out.  You generate a public and private keypair with SSH (or something else).  When you want to communicate with someone securely, you give them your public key, and they give you theirs.  When communicating, you encrypt your message with the recepients public key.  Nobody can decrypt the message without the corresponding private key.&lt;/p&gt;
+
+&lt;h2 id=&quot;setting-up-ssh-keys&quot;&gt;Setting up ssh keys&lt;/h2&gt;
+
+&lt;h3 id=&quot;generating-the-keys&quot;&gt;Generating the keys&lt;/h3&gt;
+
+&lt;p&gt;Type the following into a shell on the machine you want to use to connect:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;mkdir -p ~/.ssh&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh keygen -t rsa&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Or if you want a DSA key:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ssh keygen -t dsa&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is &lt;code&gt;~/.ssh/id_rsa&lt;/code&gt; and &lt;code&gt;~/.ssh/id_rsa.pub&lt;/code&gt;).  It also asks if you want to give your key a passphrase (you should).&lt;/p&gt;
+
+&lt;p&gt;Change the permissions on your keys so that they are only writeable/readable by you:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;chmod 600 ~/.ssh/id_rsa*&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;authorizing-your-machine-to-communicate-with-the-remote-host&quot;&gt;Authorizing your machine to communicate with the remote host&lt;/h3&gt;
+
+&lt;p&gt;You need to add your public key to a file called &lt;code&gt;authorized_keys&lt;/code&gt;.  This lets ssh know who to let connect.  You can &lt;code&gt;scp&lt;/code&gt; your key over to the remote machine (or pscp with PuTTY):&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;scp ~/.ssh/id_rsa.pub remote_machine:/home/you/.ssh&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Once the public key is on the remote machine, add it to &lt;code&gt;authorized_keys&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;cat id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Make sure the key has actually been added to &lt;code&gt;authorized_keys&lt;/code&gt;.  When you know it’s in there, delete the public key:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;rm id_rsa.pub&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You should be able to access the remote machine now without a password.&lt;/p&gt;
+
+&lt;h3 id=&quot;disabling-passphrase-authentication-and-changing-the-default-port&quot;&gt;Disabling passphrase authentication and changing the default port&lt;/h3&gt;
+
+&lt;p&gt;I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.&lt;/p&gt;
+
+&lt;p&gt;The config files for the ssh server live in &lt;code&gt;/etc/ssh/sshd&lt;/code&gt; on the remote machine.  Open up the &lt;code&gt;sshd_config&lt;/code&gt; file (you might have to sudo) in an editor and uncomment the line:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;#PasswordAuthentication no&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in &lt;code&gt;ssh_config&lt;/code&gt; on the machine you use to connect as well.  This saves you from having to specify the port every time with &lt;code&gt;ssh -p&lt;/code&gt;.&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
    <title>First Post</title>
    <link href="http://tomgeorge.github.io/2015/01/06/first-post/"/>
    <updated>2015-01-06T00:00:00-05:00</updated>
    <id>http://tomgeorge.github.io/2015/01/06/first-post</id>
-   <content type="html">&lt;p&gt;This is my first post.  I&amp;#39;m mostly going to be talking about programming (I like &lt;a href=&quot;http://clojure.org&quot;&gt;Clojure&lt;/a&gt;), doing programming challenges, and little sysadmin tricks I pick up along the way at work and during administration of my VirtualBox setup at home.&lt;/p&gt;
+   <content type="html">&lt;p&gt;This is my first post.  I’m mostly going to be talking about programming (I like &lt;a href=&quot;http://clojure.org&quot;&gt;Clojure&lt;/a&gt;), and doing programming challenges.&lt;/p&gt;
 
-&lt;p&gt;I&amp;#39;m a software developer at &lt;a href=&quot;http://www.paychex.com&quot;&gt;Paychex&lt;/a&gt; in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET, on different environments.  I work mostly in the back end on our moving transmission infrastructure.&lt;/p&gt;
+&lt;p&gt;I’m a software developer at &lt;a href=&quot;http://www.paychex.com&quot;&gt;Paychex&lt;/a&gt; in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET.  I work mostly in the back end on our money transmission and filing infrastructure.&lt;/p&gt;
 </content>
  </entry>
  
