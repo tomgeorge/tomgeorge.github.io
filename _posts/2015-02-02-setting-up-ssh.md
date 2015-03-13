@@ -3,17 +3,9 @@ layout: post
 title: Setting up SSH on Debian in VirtualBox
 ---
 
-The title says "Setting up SSH on Debian in VirtualBox" but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I'll talk real quick about what ssh is and why public-key authentication is a good idea.
+The title says "Setting up SSH on Debian in VirtualBox" but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.
 
 You will need `openssh-server` on the remote machine.
-
-##SSH
-
-**S**ecure **SH**ell, fittingly, is a method that allows two machines to communicate securely over a network.  I'm sure it uses algorithms and whatever to work.  
-
-##Public key authentication
-
-Public key authentication is a pretty simple concept that took me like a year to figure out.  You generate a public and private keypair with SSH (or something else).  When you want to communicate with someone securely, you give them your public key, and they give you theirs.  When communicating, you encrypt your message with the recepients public key.  Nobody can decrypt the message without the corresponding private key.
 
 ##Setting up ssh keys
 
