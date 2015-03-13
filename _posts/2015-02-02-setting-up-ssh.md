@@ -3,7 +3,7 @@ layout: post
 title: Setting up SSH on Debian in VirtualBox
 ---
 
-The title says "Setting up SSH on Debian in VirtualBox" but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.
+The title says, "Setting up SSH on Debian in VirtualBox", but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.
 
 You will need `openssh-server` on the remote machine.
 
