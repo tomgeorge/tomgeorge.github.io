@@ -13,7 +13,7 @@ title:               Tom George
 tagline:             'Tom George'
 description:         'Blog of <a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>. Sometimes I write about programming.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.'
 url:                 http://tomgeorge.github.io
-baseurl:             /
+baseurl:             http://tomgeorge.github.io/
 paginate:            5
 
 # About/contact
