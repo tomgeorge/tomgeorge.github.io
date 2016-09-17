@@ -18,7 +18,7 @@ I had wanted to try out  [Selenium](http://www.seleniumhq.org) ever since my las
 [clj-webdriver "0.6.1"]
 ```
 
-Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of `selenium-server.jar` that `clj-webdriver requires`.  I also had to clone clj-webdriver master and do a `lein install` because I encountered something similar to [this issue](https://github.com/semperos/clj-webdriver/issues/137) on my first couple of tries.
+Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of `selenium-server.jar` that `clj-webdriver` requires.  I also had to clone clj-webdriver master and do a `lein install` because I encountered something similar to [this issue](https://github.com/semperos/clj-webdriver/issues/137) on my first couple of tries.
 
 
 
@@ -92,7 +92,7 @@ elenium.interactions.Actions@47b259ab>}
   [database]
   (select-option "#db-dropdown" database))
 
-
+;; Fixture to start the browser
 (defn start-browser
   (set-driver! {:browser :firefox}) url))
 {% endhighlight %}
@@ -102,3 +102,5 @@ elenium.interactions.Actions@47b259ab>}
 I couldn't test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a runtime profile at times.
 
 I couldn't get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do `lein install` which adds it to my local maven repository.
+
+Then you can write regular clojure tests in your library of choice.
