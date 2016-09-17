@@ -30,7 +30,7 @@
 </head>
 
 
-  <body class="layout-reverse" >
+  <body>
 
     <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
      styles, `#sidebar-checkbox` for behavior. -->
@@ -67,12 +67,12 @@
     
 
     <a class="sidebar-nav-item" href="https://github.com/tomgeorge">GitHub</a>
-    <span class="sidebar-nav-item">Currently v1.0.0</span>
+    <span class="sidebar-nav-item">Currently v2.0.0</span>
   </nav>
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -91,105 +91,36 @@
       </div>
 
       <div class="container content">
-        <div class="posts">
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/03/05/testing_web_pages_with_clj_webdriver/">
-        Testing Clojurescript web apps with clj-webdriver
-      </a>
-    </h1>
+        <ul>
+	
+	<li>
+	<a href="/2015/02/02/setting-up-ssh/">Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</a> - February 02, 2015
+	</li>
+	
+	<li>
+	<a href="/2015/01/06/first-post/">First Post</a> - January 06, 2015
+	</li>
+	
+</ul>
 
-    <span class="post-date">05 Mar 2015</span>
-
-    <p>I’ve been working on a side project for work to learn about Clojure and Clojurescript.  </p>
-
-<p><code>lein ring server-headless</code></p>
-
-<p><code>lein repl</code></p>
-
-<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;clj-webdriver.taxi</span><span class="p">)</span>
-<span class="nv">=&gt;</span> <span class="nv">nil</span>
-<span class="p">(</span><span class="nf">set-driver!</span> <span class="p">{</span><span class="ss">:browser</span> <span class="ss">:firefox</span><span class="p">})</span>
-<span class="p">(</span><span class="nf">value</span> <span class="s">&quot;#db-dropdown&quot;</span><span class="p">)</span>
-<span class="nv">=&gt;</span> <span class="s">&quot;\n&quot;</span></code></pre></div>
-
-<p><code>
-attribute 
-</code>
-takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
-<code>
-(attribute "select" :id)
-=&gt;"db-dropdown"
-</code></p>
-
-<p><code>
-(attribute "select" :style
-=&gt; "width: 200px"
-</code></p>
-
-<p><code>
-(attribute "div" :class)
-=&gt; container
-</code></p>
-
-<h2 id="changing-stuffs-value">Changing stuff’s value</h2>
-
-<p><code>
-(select-option "db-dropdown" {:value "database1"}
-=&gt;
-</code>
-##Refresh the page
-<code>
-(refresh)
-=&gt; #clj_webdriver.driver.Driver{:webdriver #&lt;Title: , URL: http://localhost:3000/,
-Browser: firefox, Version: 35.0, JS Enabled: true, Native Events Enabled: false,
- Object: FirefoxDriver: firefox on WINDOWS (dbb875ca-3f66-4208-920b-054c1fd360cb
-)&gt;, :capabilities nil, :cache-spec {:cache nil}, :actions #&lt;Actions org.openqa.s
-elenium.interactions.Actions@47b259ab&gt;}
-</code></p>
-
-<h2 id="putting-it-into-a-file">Putting it into a file</h2>
-
-<p>```
-(def url “http://localhost:3000”)</p>
-
-<p>(defn change-database
-  [database]
-  (select-option “#db-dropdown” database))
-```</p>
-
-<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">start-browser</span>
-  <span class="p">(</span><span class="nf">set-driver!</span> <span class="p">{</span><span class="ss">:browser</span> <span class="ss">:firefox</span><span class="p">})</span> <span class="nv">url</span><span class="p">))</span></code></pre></div>
-
-<p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.</p>
-
-<p>I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do <code>lein install</code> which adds it to my local maven repository.  </p>
-
-  </div>
+<!-- <div class="posts">
   
   <div class="post">
     <h1 class="post-title">
       <a href="/2015/02/02/setting-up-ssh/">
-        Setting up SSH on Debian in VirtualBox
+        Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox
       </a>
     </h1>
 
     <span class="post-date">02 Feb 2015</span>
 
-    <p>The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.</p>
+    <p>This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.</p>
+
+<p>The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.</p>
 
 <p>You will need <code>openssh-server</code> on the remote machine.</p>
 
-<h2 id="ssh">SSH</h2>
-
-<p><strong>S</strong>ecure <strong>SH</strong>ell, fittingly, is a method that allows two machines to communicate securely over a network.  I’m sure it uses algorithms and whatever to work.  </p>
-
-<h2 id="public-key-authentication">Public key authentication</h2>
-
-<p>Public key authentication is a pretty simple concept that took me like a year to figure out.  You generate a public and private keypair with SSH (or something else).  When you want to communicate with someone securely, you give them your public key, and they give you theirs.  When communicating, you encrypt your message with the recepients public key.  Nobody can decrypt the message without the corresponding private key.</p>
-
-<h2 id="setting-up-ssh-keys">Setting up ssh keys</h2>
+<h1 id="setting-up-ssh-keys">Setting up ssh keys</h1>
 
 <h3 id="generating-the-keys">Generating the keys</h3>
 
@@ -211,17 +142,15 @@ elenium.interactions.Actions@47b259ab&gt;}
 
 <h3 id="authorizing-your-machine-to-communicate-with-the-remote-host">Authorizing your machine to communicate with the remote host</h3>
 
-<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can <code>scp</code> your key over to the remote machine (or pscp with PuTTY):</p>
+<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code>ssh-copy-id</code> command to do this:</p>
 
-<p><code>scp ~/.ssh/id_rsa.pub remote_machine:/home/you/.ssh</code></p>
+<p><code>ssh-agent bash &lt;your PRIVATE key file&gt;</code></p>
 
-<p>Once the public key is on the remote machine, add it to <code>authorized_keys</code>:</p>
+<p>It will ask for a password.</p>
 
-<p><code>cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</code></p>
+<p>Then:</p>
 
-<p>Make sure the key has actually been added to <code>authorized_keys</code>.  When you know it’s in there, delete the public key:</p>
-
-<p><code>rm id_rsa.pub</code></p>
+<p><code>ssh-copy-id user@host</code></p>
 
 <p>You should be able to access the remote machine now without a password.</p>
 
@@ -229,16 +158,21 @@ elenium.interactions.Actions@47b259ab&gt;}
 
 <p>I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.</p>
 
-<p>The config files for the ssh server live in <code>/etc/ssh/sshd</code> on the remote machine.  Open up the <code>sshd_config</code> file (you might have to sudo) in an editor and uncomment the line:</p>
+<p>The config files for the ssh server live in <code>/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code>sshd_config</code> file (you probably have to use <code>sudo</code>) in an editor and uncomment the line:</p>
 
 <p><code>#PasswordAuthentication no</code></p>
+
+<p>Also, make sure this line is uncommented</p>
+
+<p><code>#PermitRootLogin no</code></p>
+
+<p>If the line doesn’t exist, make it.</p>
 
 <p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code>ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code>ssh -p</code>.</p>
 
 <p>To see the impact of these changes, restart ssh on the remote machine:</p>
 
 <p><code>sudo service ssh restart</code></p>
-
 
   </div>
   
@@ -266,7 +200,7 @@ elenium.interactions.Actions@47b259ab&gt;}
   
     <span class="pagination-item newer">Newer</span>
   
-</div>
+</div> -->
 
 
       </div>

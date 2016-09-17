@@ -11,7 +11,7 @@
 
   <title>
     
-      Setting up SSH on Debian in VirtualBox &middot; Tom George
+      Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox &middot; Tom George
     
   </title>
 
@@ -30,7 +30,7 @@
 </head>
 
 
-  <body class="layout-reverse" >
+  <body>
 
     <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
      styles, `#sidebar-checkbox` for behavior. -->
@@ -67,12 +67,12 @@
     
 
     <a class="sidebar-nav-item" href="https://github.com/tomgeorge">GitHub</a>
-    <span class="sidebar-nav-item">Currently v1.0.0</span>
+    <span class="sidebar-nav-item">Currently v2.0.0</span>
   </nav>
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -92,21 +92,15 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Setting up SSH on Debian in VirtualBox</h1>
+  <h1 class="post-title">Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</h1>
   <span class="post-date">02 Feb 2015</span>
-  <p>The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.</p>
+  <p>This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.</p>
+
+<p>The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.</p>
 
 <p>You will need <code>openssh-server</code> on the remote machine.</p>
 
-<h2 id="ssh">SSH</h2>
-
-<p><strong>S</strong>ecure <strong>SH</strong>ell, fittingly, is a method that allows two machines to communicate securely over a network.  I’m sure it uses algorithms and whatever to work.  </p>
-
-<h2 id="public-key-authentication">Public key authentication</h2>
-
-<p>Public key authentication is a pretty simple concept that took me like a year to figure out.  You generate a public and private keypair with SSH (or something else).  When you want to communicate with someone securely, you give them your public key, and they give you theirs.  When communicating, you encrypt your message with the recepients public key.  Nobody can decrypt the message without the corresponding private key.</p>
-
-<h2 id="setting-up-ssh-keys">Setting up ssh keys</h2>
+<h1 id="setting-up-ssh-keys">Setting up ssh keys</h1>
 
 <h3 id="generating-the-keys">Generating the keys</h3>
 
@@ -128,17 +122,15 @@
 
 <h3 id="authorizing-your-machine-to-communicate-with-the-remote-host">Authorizing your machine to communicate with the remote host</h3>
 
-<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can <code>scp</code> your key over to the remote machine (or pscp with PuTTY):</p>
+<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code>ssh-copy-id</code> command to do this:</p>
 
-<p><code>scp ~/.ssh/id_rsa.pub remote_machine:/home/you/.ssh</code></p>
+<p><code>ssh-agent bash &lt;your PRIVATE key file&gt;</code></p>
 
-<p>Once the public key is on the remote machine, add it to <code>authorized_keys</code>:</p>
+<p>It will ask for a password.</p>
 
-<p><code>cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</code></p>
+<p>Then:</p>
 
-<p>Make sure the key has actually been added to <code>authorized_keys</code>.  When you know it’s in there, delete the public key:</p>
-
-<p><code>rm id_rsa.pub</code></p>
+<p><code>ssh-copy-id user@host</code></p>
 
 <p>You should be able to access the remote machine now without a password.</p>
 
@@ -146,9 +138,15 @@
 
 <p>I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.</p>
 
-<p>The config files for the ssh server live in <code>/etc/ssh/sshd</code> on the remote machine.  Open up the <code>sshd_config</code> file (you might have to sudo) in an editor and uncomment the line:</p>
+<p>The config files for the ssh server live in <code>/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code>sshd_config</code> file (you probably have to use <code>sudo</code>) in an editor and uncomment the line:</p>
 
 <p><code>#PasswordAuthentication no</code></p>
+
+<p>Also, make sure this line is uncommented</p>
+
+<p><code>#PermitRootLogin no</code></p>
+
+<p>If the line doesn’t exist, make it.</p>
 
 <p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code>ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code>ssh -p</code>.</p>
 
@@ -156,21 +154,11 @@
 
 <p><code>sudo service ssh restart</code></p>
 
-
 </div>
 
 <div class="related">
   <h2>Related Posts</h2>
   <ul class="related-posts">
-    
-      <li>
-        <h3>
-          <a href="//2015/03/05/testing_web_pages_with_clj_webdriver/">
-            Testing Clojurescript web apps with clj-webdriver
-            <small>05 Mar 2015</small>
-          </a>
-        </h3>
-      </li>
     
       <li>
         <h3>

@@ -4,7 +4,7 @@
  <title>Tom George</title>
  <link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
  <link href="http://tomgeorge.github.io/"/>
- <updated>2015-03-05T07:23:24-05:00</updated>
+ <updated>2016-09-16T21:38:09-04:00</updated>
  <id>http://tomgeorge.github.io</id>
  <author>
    <name>Tom George</name>
@@ -13,94 +13,17 @@
 
  
  <entry>
-   <title>Testing Clojurescript web apps with clj-webdriver</title>
-   <link href="http://tomgeorge.github.io/2015/03/05/testing_web_pages_with_clj_webdriver/"/>
-   <updated>2015-03-05T07:23:24-05:00</updated>
-   <id>http://tomgeorge.github.io/2015/03/05/testing_web_pages_with_clj_webdriver</id>
-   <content type="html">&lt;p&gt;I’ve been working on a side project for work to learn about Clojure and Clojurescript.  &lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;lein ring server-headless&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;lein repl&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&amp;#39;clj-webdriver.taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;nil&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:browser&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;#db-dropdown&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code&gt;
-attribute 
-&lt;/code&gt;
-takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
-&lt;code&gt;
-(attribute &quot;select&quot; :id)
-=&amp;gt;&quot;db-dropdown&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-(attribute &quot;select&quot; :style
-=&amp;gt; &quot;width: 200px&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-(attribute &quot;div&quot; :class)
-=&amp;gt; container
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;changing-stuffs-value&quot;&gt;Changing stuff’s value&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;
-(select-option &quot;db-dropdown&quot; {:value &quot;database1&quot;}
-=&amp;gt;
-&lt;/code&gt;
-##Refresh the page
-&lt;code&gt;
-(refresh)
-=&amp;gt; #clj_webdriver.driver.Driver{:webdriver #&amp;lt;Title: , URL: http://localhost:3000/,
-Browser: firefox, Version: 35.0, JS Enabled: true, Native Events Enabled: false,
- Object: FirefoxDriver: firefox on WINDOWS (dbb875ca-3f66-4208-920b-054c1fd360cb
-)&amp;gt;, :capabilities nil, :cache-spec {:cache nil}, :actions #&amp;lt;Actions org.openqa.s
-elenium.interactions.Actions@47b259ab&amp;gt;}
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;putting-it-into-a-file&quot;&gt;Putting it into a file&lt;/h2&gt;
-
-&lt;p&gt;```
-(def url “http://localhost:3000”)&lt;/p&gt;
-
-&lt;p&gt;(defn change-database
-  [database]
-  (select-option “#db-dropdown” database))
-```&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;defn &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;start-browser&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:browser&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.&lt;/p&gt;
-
-&lt;p&gt;I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do &lt;code&gt;lein install&lt;/code&gt; which adds it to my local maven repository.  &lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Setting up SSH on Debian in VirtualBox</title>
+   <title>Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</title>
    <link href="http://tomgeorge.github.io/2015/02/02/setting-up-ssh/"/>
    <updated>2015-02-02T00:00:00-05:00</updated>
    <id>http://tomgeorge.github.io/2015/02/02/setting-up-ssh</id>
-   <content type="html">&lt;p&gt;The title says “Setting up SSH on Debian in VirtualBox” but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.  First, I’ll talk real quick about what ssh is and why public-key authentication is a good idea.&lt;/p&gt;
+   <content type="html">&lt;p&gt;This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.&lt;/p&gt;
+
+&lt;p&gt;The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.&lt;/p&gt;
 
 &lt;p&gt;You will need &lt;code&gt;openssh-server&lt;/code&gt; on the remote machine.&lt;/p&gt;
 
-&lt;h2 id=&quot;ssh&quot;&gt;SSH&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;SH&lt;/strong&gt;ell, fittingly, is a method that allows two machines to communicate securely over a network.  I’m sure it uses algorithms and whatever to work.  &lt;/p&gt;
-
-&lt;h2 id=&quot;public-key-authentication&quot;&gt;Public key authentication&lt;/h2&gt;
-
-&lt;p&gt;Public key authentication is a pretty simple concept that took me like a year to figure out.  You generate a public and private keypair with SSH (or something else).  When you want to communicate with someone securely, you give them your public key, and they give you theirs.  When communicating, you encrypt your message with the recepients public key.  Nobody can decrypt the message without the corresponding private key.&lt;/p&gt;
-
-&lt;h2 id=&quot;setting-up-ssh-keys&quot;&gt;Setting up ssh keys&lt;/h2&gt;
+&lt;h1 id=&quot;setting-up-ssh-keys&quot;&gt;Setting up ssh keys&lt;/h1&gt;
 
 &lt;h3 id=&quot;generating-the-keys&quot;&gt;Generating the keys&lt;/h3&gt;
 
@@ -122,17 +45,15 @@ elenium.interactions.Actions@47b259ab&amp;gt;}
 
 &lt;h3 id=&quot;authorizing-your-machine-to-communicate-with-the-remote-host&quot;&gt;Authorizing your machine to communicate with the remote host&lt;/h3&gt;
 
-&lt;p&gt;You need to add your public key to a file called &lt;code&gt;authorized_keys&lt;/code&gt;.  This lets ssh know who to let connect.  You can &lt;code&gt;scp&lt;/code&gt; your key over to the remote machine (or pscp with PuTTY):&lt;/p&gt;
+&lt;p&gt;You need to add your public key to a file called &lt;code&gt;authorized_keys&lt;/code&gt;.  This lets ssh know who to let connect.  You can use the &lt;code&gt;ssh-copy-id&lt;/code&gt; command to do this:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;scp ~/.ssh/id_rsa.pub remote_machine:/home/you/.ssh&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ssh-agent bash &amp;lt;your PRIVATE key file&amp;gt;&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Once the public key is on the remote machine, add it to &lt;code&gt;authorized_keys&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;It will ask for a password.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;cat id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Then:&lt;/p&gt;
 
-&lt;p&gt;Make sure the key has actually been added to &lt;code&gt;authorized_keys&lt;/code&gt;.  When you know it’s in there, delete the public key:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;rm id_rsa.pub&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ssh-copy-id user@host&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;You should be able to access the remote machine now without a password.&lt;/p&gt;
 
@@ -140,16 +61,21 @@ elenium.interactions.Actions@47b259ab&amp;gt;}
 
 &lt;p&gt;I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.&lt;/p&gt;
 
-&lt;p&gt;The config files for the ssh server live in &lt;code&gt;/etc/ssh/sshd&lt;/code&gt; on the remote machine.  Open up the &lt;code&gt;sshd_config&lt;/code&gt; file (you might have to sudo) in an editor and uncomment the line:&lt;/p&gt;
+&lt;p&gt;The config files for the ssh server live in &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; on the remote machine.  Open up the &lt;code&gt;sshd_config&lt;/code&gt; file (you probably have to use &lt;code&gt;sudo&lt;/code&gt;) in an editor and uncomment the line:&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;#PasswordAuthentication no&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Also, make sure this line is uncommented&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;#PermitRootLogin no&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If the line doesn’t exist, make it.&lt;/p&gt;
 
 &lt;p&gt;Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in &lt;code&gt;ssh_config&lt;/code&gt; on the machine you use to connect as well.  This saves you from having to specify the port every time with &lt;code&gt;ssh -p&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;To see the impact of these changes, restart ssh on the remote machine:&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;sudo service ssh restart&lt;/code&gt;&lt;/p&gt;
-
 </content>
  </entry>
  

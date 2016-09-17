@@ -1,19 +1,19 @@
 # Dependencies
 markdown:            kramdown
 highlighter:         pygments
+gems:                [jekyll-paginate]
 
 # Permalinks
 #
 # Use of `relative_permalinks` ensures post links from the index work properly.
 permalink:           pretty
-relative_permalinks: true
 
 # Setup
 title:               Tom George
-tagline:             'Tom George'
+tagline:             'They told me I should have a blog'
 description:         'Blog of <a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>. Sometimes I write about programming.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.'
 url:                 http://tomgeorge.github.io
-baseurl:             http://tomgeorge.github.io/
+baseurl:             '/'
 paginate:            5
 
 # About/contact
@@ -23,4 +23,4 @@ author:
   email:             tg82490@gmail.com
 
 # Custom vars
-version:             1.0.0
+version:             2.0.0
