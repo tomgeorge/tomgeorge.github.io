@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Tom George</title>
- <link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
- <link href="http://tomgeorge.github.io/"/>
- <updated>2016-09-17T16:36:44-04:00</updated>
- <id>http://tomgeorge.github.io</id>
+<link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
+<link href="http://tomgeorge.github.io/"/>
+ <updated>2016-09-17T16:52:15-04:00</updated>
+<id>http://tomgeorge.github.io</id>
  <author>
    <name>Tom George</name>
    <email>tg82490@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Testing Clojurescript web apps with clj-webdriver</title>
-   <link href="http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver/"/>
+ <link href="http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver/"/>
    <updated>2015-09-17T00:00:00-04:00</updated>
-   <id>http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver</id>
+ <id>http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver</id>
    <content type="html">&lt;p&gt;This post describes how to get up and running with Selenium and automating browser testing in Clojure with &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.&lt;/p&gt;
 
 &lt;p&gt;I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of &lt;a href=&quot;http://github.com/edn-format/edn&quot;&gt;edn&lt;/a&gt; tagged values that I made handlers for, but that’s probably a post for another day.&lt;/p&gt;
@@ -31,7 +31,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of &lt;code class=&quot;highlighter-rouge&quot;&gt;selenium-server.jar&lt;/code&gt; that &lt;code class=&quot;highlighter-rouge&quot;&gt;clj-webdriver requires&lt;/code&gt;.  I also had to clone clj-webdriver master and do a &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; because I encountered something similar to &lt;a href=&quot;https://github.com/semperos/clj-webdriver/issues/137&quot;&gt;this issue&lt;/a&gt; on my first couple of tries.&lt;/p&gt;
+&lt;p&gt;Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of &lt;code class=&quot;highlighter-rouge&quot;&gt;selenium-server.jar&lt;/code&gt; that &lt;code class=&quot;highlighter-rouge&quot;&gt;clj-webdriver&lt;/code&gt; requires.  I also had to clone clj-webdriver master and do a &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; because I encountered something similar to &lt;a href=&quot;https://github.com/semperos/clj-webdriver/issues/137&quot;&gt;this issue&lt;/a&gt; on my first couple of tries.&lt;/p&gt;
 
 &lt;p&gt;We start our app:&lt;/p&gt;
 
@@ -91,21 +91,23 @@
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select-option&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; Fixture to start the browser
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start-browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a runtime profile at times.&lt;/p&gt;
 
 &lt;p&gt;I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; which adds it to my local maven repository.&lt;/p&gt;
+
+&lt;p&gt;Then you can write regular clojure tests in your library of choice.&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</title>
-   <link href="http://tomgeorge.github.io/2015/02/02/setting-up-ssh/"/>
+ <link href="http://tomgeorge.github.io/2015/02/02/setting-up-ssh/"/>
    <updated>2015-02-02T00:00:00-05:00</updated>
-   <id>http://tomgeorge.github.io/2015/02/02/setting-up-ssh</id>
+ <id>http://tomgeorge.github.io/2015/02/02/setting-up-ssh</id>
    <content type="html">&lt;p&gt;This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.&lt;/p&gt;
 
 &lt;p&gt;The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.&lt;/p&gt;
@@ -172,9 +174,9 @@
  
  <entry>
    <title>First Post</title>
-   <link href="http://tomgeorge.github.io/2015/01/06/first-post/"/>
+ <link href="http://tomgeorge.github.io/2015/01/06/first-post/"/>
    <updated>2015-01-06T00:00:00-05:00</updated>
-   <id>http://tomgeorge.github.io/2015/01/06/first-post</id>
+ <id>http://tomgeorge.github.io/2015/01/06/first-post</id>
    <content type="html">&lt;p&gt;This is my first post.  I’m mostly going to be talking about programming (I like &lt;a href=&quot;http://clojure.org&quot;&gt;Clojure&lt;/a&gt;), and doing programming challenges.&lt;/p&gt;
 
 &lt;p&gt;I’m a software developer at &lt;a href=&quot;http://www.paychex.com&quot;&gt;Paychex&lt;/a&gt; in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET.  I work mostly in the back end on our money transmission and filing infrastructure.&lt;/p&gt;

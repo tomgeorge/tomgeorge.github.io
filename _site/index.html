@@ -43,7 +43,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item active" href="/">Home</a>
+    <a class="sidebar-nav-item" href="/">Home</a>
 
     
 
@@ -133,7 +133,7 @@
 </code></pre>
 </div>
 
-<p>Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of <code class="highlighter-rouge">selenium-server.jar</code> that <code class="highlighter-rouge">clj-webdriver requires</code>.  I also had to clone clj-webdriver master and do a <code class="highlighter-rouge">lein install</code> because I encountered something similar to <a href="https://github.com/semperos/clj-webdriver/issues/137">this issue</a> on my first couple of tries.</p>
+<p>Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of <code class="highlighter-rouge">selenium-server.jar</code> that <code class="highlighter-rouge">clj-webdriver</code> requires.  I also had to clone clj-webdriver master and do a <code class="highlighter-rouge">lein install</code> because I encountered something similar to <a href="https://github.com/semperos/clj-webdriver/issues/137">this issue</a> on my first couple of tries.</p>
 
 <p>We start our app:</p>
 
@@ -193,13 +193,15 @@
   </span><span class="p">[</span><span class="n">database</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="nf">select-option</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="w"> </span><span class="n">database</span><span class="p">))</span><span class="w">
 
-
+</span><span class="c1">;; Fixture to start the browser
 </span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">start-browser</span><span class="w">
   </span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w"> </span><span class="n">url</span><span class="p">))</span></code></pre></figure>
 
 <p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a runtime profile at times.</p>
 
 <p>I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do <code class="highlighter-rouge">lein install</code> which adds it to my local maven repository.</p>
+
+<p>Then you can write regular clojure tests in your library of choice.</p>
 
   </div>
   
