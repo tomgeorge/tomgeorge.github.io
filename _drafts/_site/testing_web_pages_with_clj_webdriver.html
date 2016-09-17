@@ -1,0 +1,78 @@
+<p>This post describes how to get up and running with Selenium and automating browser testing in Clojure with <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.</p>
+
+<p>I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of <a href="http://github.com/edn-format/edn">edn</a> tagged values that I made handlers for, but that’s probably a post for another day.</p>
+
+<p>I had wanted to try out  <a href="http://www.seleniumhq.org">Selenium</a> ever since my last project at work, but due to time constraints I wasn’t able to get past adding it to my NuGet dependency list.  I wrote a front end for my side-project in <a href="http://reagent-project.github.io">Reagent</a>, so I figured I’d play with it on this, instead.</p>
+
+<p>##Setup</p>
+
+<p><a href="https://github.com/semperos?tab=repositories">Daniel Gregoire</a> wrote an API for Selenium-Webdriver aptly named <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[clj-webdriver "0.6.1"]
+</code></pre>
+</div>
+
+<p>Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of <code class="highlighter-rouge">selenium-server.jar</code> that <code class="highlighter-rouge">clj-webdriver requires</code>.  I also had to clone clj-webdriver master and do a <code class="highlighter-rouge">lein install</code> because I encountered something similar to <a href="https://github.com/semperos/clj-webdriver/issues/137">this issue</a> on my first couple of tries.</p>
+
+<p><code class="highlighter-rouge">lein ring server-headless</code></p>
+
+<p><code class="highlighter-rouge">lein repl</code></p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">use</span><span class="w"> </span><span class="ss">'clj-webdriver.taxi</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="n">nil</span><span class="w">
+</span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w">
+</span><span class="p">(</span><span class="nf">value</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="s">"\n"</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>attribute 
+</code></pre>
+</div>
+<p>takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
+<code class="highlighter-rouge">
+(attribute "select" :id)
+=&gt;"db-dropdown"
+</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(attribute "select" :style
+=&gt; "width: 200px"
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(attribute "div" :class)
+=&gt; container
+</code></pre>
+</div>
+
+<p>##Changing stuff’s value</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(select-option "db-dropdown" {:value "database1"}
+=&gt;
+</code></pre>
+</div>
+<p>##Refresh the page
+<code class="highlighter-rouge">
+(refresh)
+=&gt; #clj_webdriver.driver.Driver{:webdriver #&lt;Title: , URL: http://localhost:3000/,
+Browser: firefox, Version: 35.0, JS Enabled: true, Native Events Enabled: false,
+ Object: FirefoxDriver: firefox on WINDOWS (dbb875ca-3f66-4208-920b-054c1fd360cb
+)&gt;, :capabilities nil, :cache-spec {:cache nil}, :actions #&lt;Actions org.openqa.s
+elenium.interactions.Actions@47b259ab&gt;}
+</code></p>
+
+<p>##Putting it into a file</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(def url "http://localhost:3000")
+
+  
+(defn change-database
+  [database]
+  (select-option "#db-dropdown" database))
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">start-browser</span><span class="w">
+  </span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w"> </span><span class="n">url</span><span class="p">))</span></code></pre></figure>
+
+<p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.</p>
+
+<p>I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do <code class="highlighter-rouge">lein install</code> which adds it to my local maven repository.</p>
