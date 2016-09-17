@@ -39,7 +39,7 @@
 <!-- Toggleable sidebar -->
 <div class="sidebar" id="sidebar">
   <div class="sidebar-item">
-    <p>Blog of <a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>. Sometimes I write about programming.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.</p>
+    <p>Welcome to my blog! Sometimes I write about programming.  I&#8217;ll also be using this to document stuff I learn, instead of stashing it away in a text file somewhere.  If the posts aren&#8217;t super fleshed-out, I apologize.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.  I can be reached at <a href="mailto:tg82490@gmail.com">tg82490@gmail.com</a> or <a href="mailto:tgeorge@paychex.com">tgeorge@paychex.com</a></p>
   </div>
 
   <nav class="sidebar-nav">
@@ -85,7 +85,7 @@
         <div class="container">
           <h3 class="masthead-title">
             <a href="/" title="Home">Tom George</a>
-            <small>Tom George</small>
+            <small>They told me I should have a blog</small>
           </h3>
         </div>
       </div>
@@ -98,7 +98,7 @@
 
 <p>The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.</p>
 
-<p>You will need <code>openssh-server</code> on the remote machine.</p>
+<p>You will need <code class="highlighter-rouge">openssh-server</code> on the remote machine.</p>
 
 <h1 id="setting-up-ssh-keys">Setting up ssh keys</h1>
 
@@ -106,31 +106,33 @@
 
 <p>Type the following into a shell on the machine you want to use to connect:</p>
 
-<p><code>mkdir -p ~/.ssh</code></p>
+<p><code class="highlighter-rouge">mkdir -p ~/.ssh</code></p>
 
-<p><code>ssh keygen -t rsa</code></p>
+<p><code class="highlighter-rouge">ssh keygen -t rsa</code></p>
 
 <p>Or if you want a DSA key:</p>
 
-<p><code>ssh keygen -t dsa</code></p>
+<p><code class="highlighter-rouge">ssh keygen -t dsa</code></p>
 
-<p>It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is <code>~/.ssh/id_rsa</code> and <code>~/.ssh/id_rsa.pub</code>).  It also asks if you want to give your key a passphrase (you should).</p>
+<p>It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is <code class="highlighter-rouge">~/.ssh/id_rsa</code> and <code class="highlighter-rouge">~/.ssh/id_rsa.pub</code>).  It also asks if you want to give your key a passphrase (you should).</p>
 
 <p>Change the permissions on your keys so that they are only writeable/readable by you:</p>
 
-<p><code>chmod 600 ~/.ssh/id_rsa*</code></p>
+<p><code class="highlighter-rouge">chmod 600 ~/.ssh/id_rsa*</code></p>
 
 <h3 id="authorizing-your-machine-to-communicate-with-the-remote-host">Authorizing your machine to communicate with the remote host</h3>
 
-<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code>ssh-copy-id</code> command to do this:</p>
+<p>You need to add your public key to a file called <code class="highlighter-rouge">authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code class="highlighter-rouge">ssh-copy-id</code> command to do this:</p>
 
-<p><code>ssh-agent bash &lt;your PRIVATE key file&gt;</code></p>
+<p><code class="highlighter-rouge">ssh-agent bash</code></p>
+
+<p><code class="highlighter-rouge">ssh-add /path/to/your/PRIVATE key (the one that doesn't end in .pub)</code></p>
 
 <p>It will ask for a password.</p>
 
 <p>Then:</p>
 
-<p><code>ssh-copy-id user@host</code></p>
+<p><code class="highlighter-rouge">ssh-copy-id user@host</code></p>
 
 <p>You should be able to access the remote machine now without a password.</p>
 
@@ -138,27 +140,36 @@
 
 <p>I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.</p>
 
-<p>The config files for the ssh server live in <code>/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code>sshd_config</code> file (you probably have to use <code>sudo</code>) in an editor and uncomment the line:</p>
+<p>The config files for the ssh server live in <code class="highlighter-rouge">/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code class="highlighter-rouge">sshd_config</code> file (you probably have to use <code class="highlighter-rouge">sudo</code>) in an editor and uncomment the line:</p>
 
-<p><code>#PasswordAuthentication no</code></p>
+<p><code class="highlighter-rouge">#PasswordAuthentication no</code></p>
 
 <p>Also, make sure this line is uncommented</p>
 
-<p><code>#PermitRootLogin no</code></p>
+<p><code class="highlighter-rouge">#PermitRootLogin no</code></p>
 
 <p>If the line doesn’t exist, make it.</p>
 
-<p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code>ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code>ssh -p</code>.</p>
+<p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code class="highlighter-rouge">ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code class="highlighter-rouge">ssh -p</code>.</p>
 
 <p>To see the impact of these changes, restart ssh on the remote machine:</p>
 
-<p><code>sudo service ssh restart</code></p>
+<p><code class="highlighter-rouge">sudo service ssh restart</code></p>
 
 </div>
 
 <div class="related">
   <h2>Related Posts</h2>
   <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="//2016/09/16/testing_web_pages_with_clj_webdriver/">
+            Testing Clojurescript web apps with clj-webdriver
+            <small>16 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
     
       <li>
         <h3>

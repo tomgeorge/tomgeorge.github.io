@@ -11,7 +11,7 @@
 
   <title>
     
-      Tom George &middot; Tom George
+      Tom George &middot; They told me I should have a blog
     
   </title>
 
@@ -39,7 +39,7 @@
 <!-- Toggleable sidebar -->
 <div class="sidebar" id="sidebar">
   <div class="sidebar-item">
-    <p>Blog of <a href="https://twitter.com/RealTomGeorge" target="_blank">@RealTomGeorge</a>. Sometimes I write about programming.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.</p>
+    <p>Welcome to my blog! Sometimes I write about programming.  I&#8217;ll also be using this to document stuff I learn, instead of stashing it away in a text file somewhere.  If the posts aren&#8217;t super fleshed-out, I apologize.  This blog is made with the <a href="https://github.com/poole/lanyon">Lanyon</a> theme for <a href="jekyllrb.com">Jekyll</a>.  I can be reached at <a href="mailto:tg82490@gmail.com">tg82490@gmail.com</a> or <a href="mailto:tgeorge@paychex.com">tgeorge@paychex.com</a></p>
   </div>
 
   <nav class="sidebar-nav">
@@ -85,13 +85,17 @@
         <div class="container">
           <h3 class="masthead-title">
             <a href="/" title="Home">Tom George</a>
-            <small>Tom George</small>
+            <small>They told me I should have a blog</small>
           </h3>
         </div>
       </div>
 
       <div class="container content">
         <ul>
+	
+	<li>
+	<a href="/2016/09/16/testing_web_pages_with_clj_webdriver/">Testing Clojurescript web apps with clj-webdriver</a> - September 16, 2016
+	</li>
 	
 	<li>
 	<a href="/2015/02/02/setting-up-ssh/">Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</a> - February 02, 2015
@@ -107,6 +111,95 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2016/09/16/testing_web_pages_with_clj_webdriver/">
+        Testing Clojurescript web apps with clj-webdriver
+      </a>
+    </h1>
+
+    <span class="post-date">16 Sep 2016</span>
+
+    <p>This post describes how to get up and running with Selenium and automating browser testing in Clojure with <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.</p>
+
+<p>I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of <a href="http://github.com/edn-format/edn">edn</a> tagged values that I made handlers for, but that’s probably a post for another day.</p>
+
+<p>I had wanted to try out  <a href="http://www.seleniumhq.org">Selenium</a> ever since my last project at work, but due to time constraints I wasn’t able to get past adding it to my NuGet dependency list.  I wrote a front end for my side-project in <a href="http://reagent-project.github.io">Reagent</a>, so I figured I’d play with it on this, instead.</p>
+
+<h2 id="setup">Setup</h2>
+
+<p><a href="https://github.com/semperos?tab=repositories">Daniel Gregoire</a> wrote an API for Selenium-Webdriver aptly named <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[clj-webdriver "0.6.1"]
+</code></pre>
+</div>
+
+<p>Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of <code class="highlighter-rouge">selenium-server.jar</code> that <code class="highlighter-rouge">clj-webdriver requires</code>.  I also had to clone clj-webdriver master and do a <code class="highlighter-rouge">lein install</code> because I encountered something similar to <a href="https://github.com/semperos/clj-webdriver/issues/137">this issue</a> on my first couple of tries.</p>
+
+<p><code class="highlighter-rouge">lein ring server-headless</code></p>
+
+<p><code class="highlighter-rouge">lein repl</code></p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">use</span><span class="w"> </span><span class="ss">'clj-webdriver.taxi</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="n">nil</span><span class="w">
+</span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w">
+</span><span class="p">(</span><span class="nf">value</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="s">"\n"</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>attribute
+</code></pre>
+</div>
+<p>takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
+<code class="highlighter-rouge">
+(attribute "select" :id)
+=&gt;"db-dropdown"
+</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(attribute "select" :style
+=&gt; "width: 200px"
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(attribute "div" :class)
+=&gt; container
+</code></pre>
+</div>
+
+<h2 id="changing-stuffs-value">Changing stuff’s value</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(select-option "db-dropdown" {:value "database1"}
+=&gt;
+</code></pre>
+</div>
+
+<h2 id="refresh-the-page">Refresh the page</h2>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">refresh</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="o">#</span><span class="n">clj_webdriver.driver.Driver</span><span class="p">{</span><span class="no">:webdriver</span><span class="w"> </span><span class="o">#</span><span class="n">&lt;Title</span><span class="err">:</span><span class="w"> </span><span class="n">,</span><span class="w"> </span><span class="n">URL</span><span class="err">:</span><span class="w"> </span><span class="n">http</span><span class="no">://localhost:3000/,</span><span class="w">
+</span><span class="n">Browser</span><span class="err">:</span><span class="w"> </span><span class="n">firefox,</span><span class="w"> </span><span class="n">Version</span><span class="err">:</span><span class="w"> </span><span class="mf">35.0</span><span class="n">,</span><span class="w"> </span><span class="n">JS</span><span class="w"> </span><span class="n">Enabled</span><span class="err">:</span><span class="w"> </span><span class="n">true,</span><span class="w"> </span><span class="n">Native</span><span class="w"> </span><span class="n">Events</span><span class="w"> </span><span class="n">Enabled</span><span class="err">:</span><span class="w"> </span><span class="n">false,</span><span class="w">
+ </span><span class="n">Object</span><span class="err">:</span><span class="w"> </span><span class="n">FirefoxDriver</span><span class="err">:</span><span class="w"> </span><span class="n">firefox</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">WINDOWS</span><span class="w"> </span><span class="p">(</span><span class="nf">dbb875ca-3f66-4208-920b-054c1fd360cb</span><span class="w">
+</span><span class="p">)</span><span class="n">&gt;,</span><span class="w"> </span><span class="no">:capabilities</span><span class="w"> </span><span class="n">nil,</span><span class="w"> </span><span class="no">:cache-spec</span><span class="w"> </span><span class="p">{</span><span class="no">:cache</span><span class="w"> </span><span class="n">nil</span><span class="p">}</span><span class="n">,</span><span class="w"> </span><span class="no">:actions</span><span class="w"> </span><span class="o">#</span><span class="n">&lt;Actions</span><span class="w"> </span><span class="n">org.openqa.s</span><span class="w">
+</span><span class="n">elenium.interactions.Actions</span><span class="err">@</span><span class="mi">47</span><span class="n">b259ab&gt;</span><span class="p">}</span></code></pre></figure>
+
+<h2 id="putting-it-into-a-file">Putting it into a file</h2>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="s">"http://localhost:3000"</span><span class="p">)</span><span class="w">
+
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">change-database</span><span class="w">
+  </span><span class="p">[</span><span class="n">database</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">select-option</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="w"> </span><span class="n">database</span><span class="p">))</span><span class="w">
+
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">start-browser</span><span class="w">
+  </span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w"> </span><span class="n">url</span><span class="p">))</span></code></pre></figure>
+
+<p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.</p>
+
+<p>I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do <code class="highlighter-rouge">lein install</code> which adds it to my local maven repository.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2015/02/02/setting-up-ssh/">
         Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox
       </a>
@@ -118,7 +211,7 @@
 
 <p>The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.</p>
 
-<p>You will need <code>openssh-server</code> on the remote machine.</p>
+<p>You will need <code class="highlighter-rouge">openssh-server</code> on the remote machine.</p>
 
 <h1 id="setting-up-ssh-keys">Setting up ssh keys</h1>
 
@@ -126,31 +219,33 @@
 
 <p>Type the following into a shell on the machine you want to use to connect:</p>
 
-<p><code>mkdir -p ~/.ssh</code></p>
+<p><code class="highlighter-rouge">mkdir -p ~/.ssh</code></p>
 
-<p><code>ssh keygen -t rsa</code></p>
+<p><code class="highlighter-rouge">ssh keygen -t rsa</code></p>
 
 <p>Or if you want a DSA key:</p>
 
-<p><code>ssh keygen -t dsa</code></p>
+<p><code class="highlighter-rouge">ssh keygen -t dsa</code></p>
 
-<p>It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is <code>~/.ssh/id_rsa</code> and <code>~/.ssh/id_rsa.pub</code>).  It also asks if you want to give your key a passphrase (you should).</p>
+<p>It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is <code class="highlighter-rouge">~/.ssh/id_rsa</code> and <code class="highlighter-rouge">~/.ssh/id_rsa.pub</code>).  It also asks if you want to give your key a passphrase (you should).</p>
 
 <p>Change the permissions on your keys so that they are only writeable/readable by you:</p>
 
-<p><code>chmod 600 ~/.ssh/id_rsa*</code></p>
+<p><code class="highlighter-rouge">chmod 600 ~/.ssh/id_rsa*</code></p>
 
 <h3 id="authorizing-your-machine-to-communicate-with-the-remote-host">Authorizing your machine to communicate with the remote host</h3>
 
-<p>You need to add your public key to a file called <code>authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code>ssh-copy-id</code> command to do this:</p>
+<p>You need to add your public key to a file called <code class="highlighter-rouge">authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code class="highlighter-rouge">ssh-copy-id</code> command to do this:</p>
 
-<p><code>ssh-agent bash &lt;your PRIVATE key file&gt;</code></p>
+<p><code class="highlighter-rouge">ssh-agent bash</code></p>
+
+<p><code class="highlighter-rouge">ssh-add /path/to/your/PRIVATE key (the one that doesn't end in .pub)</code></p>
 
 <p>It will ask for a password.</p>
 
 <p>Then:</p>
 
-<p><code>ssh-copy-id user@host</code></p>
+<p><code class="highlighter-rouge">ssh-copy-id user@host</code></p>
 
 <p>You should be able to access the remote machine now without a password.</p>
 
@@ -158,21 +253,21 @@
 
 <p>I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.</p>
 
-<p>The config files for the ssh server live in <code>/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code>sshd_config</code> file (you probably have to use <code>sudo</code>) in an editor and uncomment the line:</p>
+<p>The config files for the ssh server live in <code class="highlighter-rouge">/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code class="highlighter-rouge">sshd_config</code> file (you probably have to use <code class="highlighter-rouge">sudo</code>) in an editor and uncomment the line:</p>
 
-<p><code>#PasswordAuthentication no</code></p>
+<p><code class="highlighter-rouge">#PasswordAuthentication no</code></p>
 
 <p>Also, make sure this line is uncommented</p>
 
-<p><code>#PermitRootLogin no</code></p>
+<p><code class="highlighter-rouge">#PermitRootLogin no</code></p>
 
 <p>If the line doesn’t exist, make it.</p>
 
-<p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code>ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code>ssh -p</code>.</p>
+<p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code class="highlighter-rouge">ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code class="highlighter-rouge">ssh -p</code>.</p>
 
 <p>To see the impact of these changes, restart ssh on the remote machine:</p>
 
-<p><code>sudo service ssh restart</code></p>
+<p><code class="highlighter-rouge">sudo service ssh restart</code></p>
 
   </div>
   

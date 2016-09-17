@@ -33,7 +33,9 @@ Change the permissions on your keys so that they are only writeable/readable by 
 
 You need to add your public key to a file called `authorized_keys`.  This lets ssh know who to let connect.  You can use the `ssh-copy-id` command to do this:
 
-`ssh-agent bash <your PRIVATE key file>`
+`ssh-agent bash`
+
+`ssh-add /path/to/your/PRIVATE key (the one that doesn't end in .pub)`
 
 It will ask for a password.
 

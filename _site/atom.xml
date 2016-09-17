@@ -4,13 +4,98 @@
  <title>Tom George</title>
  <link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
  <link href="http://tomgeorge.github.io/"/>
- <updated>2016-09-16T21:38:09-04:00</updated>
+ <updated>2016-09-16T22:16:59-04:00</updated>
  <id>http://tomgeorge.github.io</id>
  <author>
    <name>Tom George</name>
    <email>tg82490@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Testing Clojurescript web apps with clj-webdriver</title>
+   <link href="http://tomgeorge.github.io/2016/09/16/testing_web_pages_with_clj_webdriver/"/>
+   <updated>2016-09-16T21:57:46-04:00</updated>
+   <id>http://tomgeorge.github.io/2016/09/16/testing_web_pages_with_clj_webdriver</id>
+   <content type="html">&lt;p&gt;This post describes how to get up and running with Selenium and automating browser testing in Clojure with &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.&lt;/p&gt;
+
+&lt;p&gt;I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of &lt;a href=&quot;http://github.com/edn-format/edn&quot;&gt;edn&lt;/a&gt; tagged values that I made handlers for, but that’s probably a post for another day.&lt;/p&gt;
+
+&lt;p&gt;I had wanted to try out  &lt;a href=&quot;http://www.seleniumhq.org&quot;&gt;Selenium&lt;/a&gt; ever since my last project at work, but due to time constraints I wasn’t able to get past adding it to my NuGet dependency list.  I wrote a front end for my side-project in &lt;a href=&quot;http://reagent-project.github.io&quot;&gt;Reagent&lt;/a&gt;, so I figured I’d play with it on this, instead.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/semperos?tab=repositories&quot;&gt;Daniel Gregoire&lt;/a&gt; wrote an API for Selenium-Webdriver aptly named &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[clj-webdriver &quot;0.6.1&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of &lt;code class=&quot;highlighter-rouge&quot;&gt;selenium-server.jar&lt;/code&gt; that &lt;code class=&quot;highlighter-rouge&quot;&gt;clj-webdriver requires&lt;/code&gt;.  I also had to clone clj-webdriver master and do a &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; because I encountered something similar to &lt;a href=&quot;https://github.com/semperos/clj-webdriver/issues/137&quot;&gt;this issue&lt;/a&gt; on my first couple of tries.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lein ring server-headless&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lein repl&lt;/code&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;'clj-webdriver.taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\n&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;attribute
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+(attribute &quot;select&quot; :id)
+=&amp;gt;&quot;db-dropdown&quot;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(attribute &quot;select&quot; :style
+=&amp;gt; &quot;width: 200px&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(attribute &quot;div&quot; :class)
+=&amp;gt; container
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;changing-stuffs-value&quot;&gt;Changing stuff’s value&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(select-option &quot;db-dropdown&quot; {:value &quot;database1&quot;}
+=&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;refresh-the-page&quot;&gt;Refresh the page&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;refresh&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clj_webdriver.driver.Driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:webdriver&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;&amp;lt;Title&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;://localhost:3000/,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Browser&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firefox,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;35.0&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JS&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Enabled&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Native&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Events&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Enabled&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;false,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FirefoxDriver&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;firefox&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WINDOWS&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;dbb875ca-3f66-4208-920b-054c1fd360cb&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;&amp;gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:capabilities&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nil,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:cache-spec&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:cache&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:actions&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;&amp;lt;Actions&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;org.openqa.s&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;elenium.interactions.Actions&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;47&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b259ab&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;putting-it-into-a-file&quot;&gt;Putting it into a file&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:3000&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;change-database&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select-option&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start-browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.&lt;/p&gt;
+
+&lt;p&gt;I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; which adds it to my local maven repository.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</title>
@@ -21,7 +106,7 @@
 
 &lt;p&gt;The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.&lt;/p&gt;
 
-&lt;p&gt;You will need &lt;code&gt;openssh-server&lt;/code&gt; on the remote machine.&lt;/p&gt;
+&lt;p&gt;You will need &lt;code class=&quot;highlighter-rouge&quot;&gt;openssh-server&lt;/code&gt; on the remote machine.&lt;/p&gt;
 
 &lt;h1 id=&quot;setting-up-ssh-keys&quot;&gt;Setting up ssh keys&lt;/h1&gt;
 
@@ -29,31 +114,33 @@
 
 &lt;p&gt;Type the following into a shell on the machine you want to use to connect:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;mkdir -p ~/.ssh&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir -p ~/.ssh&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh keygen -t rsa&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh keygen -t rsa&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Or if you want a DSA key:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh keygen -t dsa&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh keygen -t dsa&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is &lt;code&gt;~/.ssh/id_rsa&lt;/code&gt; and &lt;code&gt;~/.ssh/id_rsa.pub&lt;/code&gt;).  It also asks if you want to give your key a passphrase (you should).&lt;/p&gt;
+&lt;p&gt;It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.ssh/id_rsa&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.ssh/id_rsa.pub&lt;/code&gt;).  It also asks if you want to give your key a passphrase (you should).&lt;/p&gt;
 
 &lt;p&gt;Change the permissions on your keys so that they are only writeable/readable by you:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;chmod 600 ~/.ssh/id_rsa*&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;chmod 600 ~/.ssh/id_rsa*&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;authorizing-your-machine-to-communicate-with-the-remote-host&quot;&gt;Authorizing your machine to communicate with the remote host&lt;/h3&gt;
 
-&lt;p&gt;You need to add your public key to a file called &lt;code&gt;authorized_keys&lt;/code&gt;.  This lets ssh know who to let connect.  You can use the &lt;code&gt;ssh-copy-id&lt;/code&gt; command to do this:&lt;/p&gt;
+&lt;p&gt;You need to add your public key to a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;authorized_keys&lt;/code&gt;.  This lets ssh know who to let connect.  You can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-copy-id&lt;/code&gt; command to do this:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh-agent bash &amp;lt;your PRIVATE key file&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-agent bash&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-add /path/to/your/PRIVATE key (the one that doesn't end in .pub)&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;It will ask for a password.&lt;/p&gt;
 
 &lt;p&gt;Then:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ssh-copy-id user@host&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-copy-id user@host&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;You should be able to access the remote machine now without a password.&lt;/p&gt;
 
@@ -61,21 +148,21 @@
 
 &lt;p&gt;I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.&lt;/p&gt;
 
-&lt;p&gt;The config files for the ssh server live in &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; on the remote machine.  Open up the &lt;code&gt;sshd_config&lt;/code&gt; file (you probably have to use &lt;code&gt;sudo&lt;/code&gt;) in an editor and uncomment the line:&lt;/p&gt;
+&lt;p&gt;The config files for the ssh server live in &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/ssh/sshd_config&lt;/code&gt; on the remote machine.  Open up the &lt;code class=&quot;highlighter-rouge&quot;&gt;sshd_config&lt;/code&gt; file (you probably have to use &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo&lt;/code&gt;) in an editor and uncomment the line:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;#PasswordAuthentication no&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;#PasswordAuthentication no&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Also, make sure this line is uncommented&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;#PermitRootLogin no&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;#PermitRootLogin no&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;If the line doesn’t exist, make it.&lt;/p&gt;
 
-&lt;p&gt;Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in &lt;code&gt;ssh_config&lt;/code&gt; on the machine you use to connect as well.  This saves you from having to specify the port every time with &lt;code&gt;ssh -p&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh_config&lt;/code&gt; on the machine you use to connect as well.  This saves you from having to specify the port every time with &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh -p&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;To see the impact of these changes, restart ssh on the remote machine:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;sudo service ssh restart&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo service ssh restart&lt;/code&gt;&lt;/p&gt;
 </content>
  </entry>
  
