@@ -67,6 +67,7 @@
     
 
     <a class="sidebar-nav-item" href="https://github.com/tomgeorge">GitHub</a>
+    <a class="sidebar-nav-item" href="https://hub.docker.com/u/tomgeorge/">Docker Hub</a>
     <span class="sidebar-nav-item">Currently v2.0.0</span>
   </nav>
 
@@ -94,7 +95,7 @@
         <ul>
 	
 	<li>
-	<a href="/2016/09/16/testing_web_pages_with_clj_webdriver/">Testing Clojurescript web apps with clj-webdriver</a> - September 16, 2016
+	<a href="/2015/09/17/testing_web_pages_with_clj_webdriver/">Testing Clojurescript web apps with clj-webdriver</a> - September 17, 2015
 	</li>
 	
 	<li>
@@ -111,12 +112,12 @@
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2016/09/16/testing_web_pages_with_clj_webdriver/">
+      <a href="/2015/09/17/testing_web_pages_with_clj_webdriver/">
         Testing Clojurescript web apps with clj-webdriver
       </a>
     </h1>
 
-    <span class="post-date">16 Sep 2016</span>
+    <span class="post-date">17 Sep 2015</span>
 
     <p>This post describes how to get up and running with Selenium and automating browser testing in Clojure with <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.</p>
 
@@ -126,7 +127,7 @@
 
 <h2 id="setup">Setup</h2>
 
-<p><a href="https://github.com/semperos?tab=repositories">Daniel Gregoire</a> wrote an API for Selenium-Webdriver aptly named <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list:</p>
+<p><a href="https://github.com/semperos?tab=repositories">Daniel Gregoire</a> wrote an API for Selenium-Webdriver aptly named <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list in project.clj:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>[clj-webdriver "0.6.1"]
 </code></pre>
@@ -134,24 +135,30 @@
 
 <p>Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of <code class="highlighter-rouge">selenium-server.jar</code> that <code class="highlighter-rouge">clj-webdriver requires</code>.  I also had to clone clj-webdriver master and do a <code class="highlighter-rouge">lein install</code> because I encountered something similar to <a href="https://github.com/semperos/clj-webdriver/issues/137">this issue</a> on my first couple of tries.</p>
 
-<p><code class="highlighter-rouge">lein ring server-headless</code></p>
+<p>We start our app:</p>
 
-<p><code class="highlighter-rouge">lein repl</code></p>
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">lein ring server-headless</code></pre></figure>
+
+<p>And then start up a repl to play around with webdriver commands:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">lein repl</code></pre></figure>
 
 <figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">use</span><span class="w"> </span><span class="ss">'clj-webdriver.taxi</span><span class="p">)</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="n">nil</span><span class="w">
 </span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w">
-</span><span class="p">(</span><span class="nf">value</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nf">value</span><span class="w"> </span><span class="s">"#db-dropdown"</span><span class="p">)</span><span class="w"> </span><span class="c1">;; some element on your page
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="s">"\n"</span></code></pre></figure>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>attribute
+<p>Taxi is the high level API for clj-webdriver.  You can find the docs <a href="https://github.com/semperos/clj-webdriver/wiki/Taxi-API-Documentation">here</a></p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="n">attribute</span></code></pre></figure>
+
+<p>takes a query for a particular element, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(attribute "select" :id)
+=&gt;"db-dropdown"
 </code></pre>
 </div>
-<p>takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
-<code class="highlighter-rouge">
-(attribute "select" :id)
-=&gt;"db-dropdown"
-</code></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>(attribute "select" :style
 =&gt; "width: 200px"
@@ -165,10 +172,8 @@
 
 <h2 id="changing-stuffs-value">Changing stuff’s value</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(select-option "db-dropdown" {:value "database1"}
-=&gt;
-</code></pre>
-</div>
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">select-option</span><span class="w"> </span><span class="s">"db-dropdown"</span><span class="w"> </span><span class="p">{</span><span class="no">:value</span><span class="w"> </span><span class="s">"database1"</span><span class="p">}</span><span class="w">
+</span><span class="n">=&gt;</span></code></pre></figure>
 
 <h2 id="refresh-the-page">Refresh the page</h2>
 
@@ -192,7 +197,7 @@
 </span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">start-browser</span><span class="w">
   </span><span class="p">(</span><span class="nf">set-driver!</span><span class="w"> </span><span class="p">{</span><span class="no">:browser</span><span class="w"> </span><span class="no">:firefox</span><span class="p">})</span><span class="w"> </span><span class="n">url</span><span class="p">))</span></code></pre></figure>
 
-<p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.</p>
+<p>I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a runtime profile at times.</p>
 
 <p>I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do <code class="highlighter-rouge">lein install</code> which adds it to my local maven repository.</p>
 
@@ -296,7 +301,6 @@
     <span class="pagination-item newer">Newer</span>
   
 </div> -->
-
 
       </div>
     </div>

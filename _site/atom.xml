@@ -4,7 +4,7 @@
  <title>Tom George</title>
  <link href="http://tomgeorge.github.io/atom.xml" rel="self"/>
  <link href="http://tomgeorge.github.io/"/>
- <updated>2016-09-16T22:16:59-04:00</updated>
+ <updated>2016-09-17T16:36:44-04:00</updated>
  <id>http://tomgeorge.github.io</id>
  <author>
    <name>Tom George</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Testing Clojurescript web apps with clj-webdriver</title>
-   <link href="http://tomgeorge.github.io/2016/09/16/testing_web_pages_with_clj_webdriver/"/>
-   <updated>2016-09-16T21:57:46-04:00</updated>
-   <id>http://tomgeorge.github.io/2016/09/16/testing_web_pages_with_clj_webdriver</id>
+   <link href="http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver/"/>
+   <updated>2015-09-17T00:00:00-04:00</updated>
+   <id>http://tomgeorge.github.io/2015/09/17/testing_web_pages_with_clj_webdriver</id>
    <content type="html">&lt;p&gt;This post describes how to get up and running with Selenium and automating browser testing in Clojure with &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.&lt;/p&gt;
 
 &lt;p&gt;I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of &lt;a href=&quot;http://github.com/edn-format/edn&quot;&gt;edn&lt;/a&gt; tagged values that I made handlers for, but that’s probably a post for another day.&lt;/p&gt;
@@ -25,7 +25,7 @@
 
 &lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/semperos?tab=repositories&quot;&gt;Daniel Gregoire&lt;/a&gt; wrote an API for Selenium-Webdriver aptly named &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/semperos?tab=repositories&quot;&gt;Daniel Gregoire&lt;/a&gt; wrote an API for Selenium-Webdriver aptly named &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I enjoy using it, particularly the nice queries you can do to retrieve elements.  I haven’t used Selenium in any other language so I can’t speak to this capability in other languages.  To install the library, add it to your dependency list in project.clj:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[clj-webdriver &quot;0.6.1&quot;]
 &lt;/code&gt;&lt;/pre&gt;
@@ -33,24 +33,30 @@
 
 &lt;p&gt;Personally, I had to downgrade firefox from 36 to 35 to get it to play nice with the version of &lt;code class=&quot;highlighter-rouge&quot;&gt;selenium-server.jar&lt;/code&gt; that &lt;code class=&quot;highlighter-rouge&quot;&gt;clj-webdriver requires&lt;/code&gt;.  I also had to clone clj-webdriver master and do a &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; because I encountered something similar to &lt;a href=&quot;https://github.com/semperos/clj-webdriver/issues/137&quot;&gt;this issue&lt;/a&gt; on my first couple of tries.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lein ring server-headless&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We start our app:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lein repl&lt;/code&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;lein ring server-headless&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And then start up a repl to play around with webdriver commands:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;lein repl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;'clj-webdriver.taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; some element on your page
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\n&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;attribute
+&lt;p&gt;Taxi is the high level API for clj-webdriver.  You can find the docs &lt;a href=&quot;https://github.com/semperos/clj-webdriver/wiki/Taxi-API-Documentation&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;n&quot;&gt;attribute&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;takes a query for a particular element, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(attribute &quot;select&quot; :id)
+=&amp;gt;&quot;db-dropdown&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;takes a query for a particular attribute, like “select” or “ul”and an attribute and returns the first HTML element that meets the query.  For example
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-(attribute &quot;select&quot; :id)
-=&amp;gt;&quot;db-dropdown&quot;
-&lt;/code&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(attribute &quot;select&quot; :style
 =&amp;gt; &quot;width: 200px&quot;
@@ -64,10 +70,8 @@
 
 &lt;h2 id=&quot;changing-stuffs-value&quot;&gt;Changing stuff’s value&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(select-option &quot;db-dropdown&quot; {:value &quot;database1&quot;}
-=&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select-option&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;db-dropdown&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;database1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;refresh-the-page&quot;&gt;Refresh the page&lt;/h2&gt;
 
@@ -91,7 +95,7 @@
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start-browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;set-driver!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:browser&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:firefox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a profile at times.&lt;/p&gt;
+&lt;p&gt;I couldn’t test with figwheel because it was broken at the time.  I also noticed figwheel making me specify a runtime profile at times.&lt;/p&gt;
 
 &lt;p&gt;I couldn’t get it to work on Firefox 36, I had to download Firefox 35.  I also had to clone clj-webdriver and do &lt;code class=&quot;highlighter-rouge&quot;&gt;lein install&lt;/code&gt; which adds it to my local maven repository.&lt;/p&gt;
 </content>
