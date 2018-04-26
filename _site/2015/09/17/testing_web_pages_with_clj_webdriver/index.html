@@ -11,7 +11,7 @@
 
   <title>
     
-      Tom George &middot; They told me I should have a blog
+      Testing Clojurescript web apps with clj-webdriver &middot; Tom George
     
   </title>
 
@@ -94,52 +94,10 @@
       </div>
 
       <div class="container content">
-        <ul>
-	
-	<li>
-	<a href="/2018/04/09/my-first-5-years-as-a-professional-software-engineer/">My First 5 years as a Software Engineer</a> - April 09, 2018
-	</li>
-	
-	<li>
-	<a href="/2015/09/17/testing_web_pages_with_clj_webdriver/">Testing Clojurescript web apps with clj-webdriver</a> - September 17, 2015
-	</li>
-	
-	<li>
-	<a href="/2015/02/02/setting-up-ssh/">Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</a> - February 02, 2015
-	</li>
-	
-	<li>
-	<a href="/2015/01/06/first-post/">First Post</a> - January 06, 2015
-	</li>
-	
-</ul>
-
-<!-- <div class="posts">
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2018/04/09/my-first-5-years-as-a-professional-software-engineer/">
-        My First 5 years as a Software Engineer
-      </a>
-    </h1>
-
-    <span class="post-date">09 Apr 2018</span>
-
-    <p>lol I’m a weiner</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/09/17/testing_web_pages_with_clj_webdriver/">
-        Testing Clojurescript web apps with clj-webdriver
-      </a>
-    </h1>
-
-    <span class="post-date">17 Sep 2015</span>
-
-    <p>This post describes how to get up and running with Selenium and automating browser testing in Clojure with <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.</p>
+        <div class="post">
+  <h1 class="post-title">Testing Clojurescript web apps with clj-webdriver</h1>
+  <span class="post-date">17 Sep 2015</span>
+  <p>This post describes how to get up and running with Selenium and automating browser testing in Clojure with <a href="https://github.com/semperos/clj-webdriver">clj-webdriver</a>.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.</p>
 
 <p>I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of <a href="http://github.com/edn-format/edn">edn</a> tagged values that I made handlers for, but that’s probably a post for another day.</p>
 
@@ -219,106 +177,41 @@
 
 <p>Then you can write regular clojure tests in your library of choice.</p>
 
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/02/02/setting-up-ssh/">
-        Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox
-      </a>
-    </h1>
-
-    <span class="post-date">02 Feb 2015</span>
-
-    <p>This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.</p>
-
-<p>The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.</p>
-
-<p>You will need <code class="highlighter-rouge">openssh-server</code> on the remote machine.</p>
-
-<h1 id="setting-up-ssh-keys">Setting up ssh keys</h1>
-
-<h3 id="generating-the-keys">Generating the keys</h3>
-
-<p>Type the following into a shell on the machine you want to use to connect:</p>
-
-<p><code class="highlighter-rouge">mkdir -p ~/.ssh</code></p>
-
-<p><code class="highlighter-rouge">ssh keygen -t rsa</code></p>
-
-<p>Or if you want a DSA key:</p>
-
-<p><code class="highlighter-rouge">ssh keygen -t dsa</code></p>
-
-<p>It asks you to give the key file a name and save it somewhere  (the default public/private key pair  is <code class="highlighter-rouge">~/.ssh/id_rsa</code> and <code class="highlighter-rouge">~/.ssh/id_rsa.pub</code>).  It also asks if you want to give your key a passphrase (you should).</p>
-
-<p>Change the permissions on your keys so that they are only writeable/readable by you:</p>
-
-<p><code class="highlighter-rouge">chmod 600 ~/.ssh/id_rsa*</code></p>
-
-<h3 id="authorizing-your-machine-to-communicate-with-the-remote-host">Authorizing your machine to communicate with the remote host</h3>
-
-<p>You need to add your public key to a file called <code class="highlighter-rouge">authorized_keys</code>.  This lets ssh know who to let connect.  You can use the <code class="highlighter-rouge">ssh-copy-id</code> command to do this:</p>
-
-<p><code class="highlighter-rouge">ssh-agent bash</code></p>
-
-<p><code class="highlighter-rouge">ssh-add /path/to/your/PRIVATE key (the one that doesn't end in .pub)</code></p>
-
-<p>It will ask for a password.</p>
-
-<p>Then:</p>
-
-<p><code class="highlighter-rouge">ssh-copy-id user@host</code></p>
-
-<p>You should be able to access the remote machine now without a password.</p>
-
-<h3 id="disabling-passphrase-authentication-and-changing-the-default-port">Disabling passphrase authentication and changing the default port</h3>
-
-<p>I also disabled passphrase authentication on my machine and changed the default port sshd listens on.  You can make a case that changing the default port doesn’t really do anything to further secure yourself, but I figure why not take all practical steps.  It’s not that hard.</p>
-
-<p>The config files for the ssh server live in <code class="highlighter-rouge">/etc/ssh/sshd_config</code> on the remote machine.  Open up the <code class="highlighter-rouge">sshd_config</code> file (you probably have to use <code class="highlighter-rouge">sudo</code>) in an editor and uncomment the line:</p>
-
-<p><code class="highlighter-rouge">#PasswordAuthentication no</code></p>
-
-<p>Also, make sure this line is uncommented</p>
-
-<p><code class="highlighter-rouge">#PermitRootLogin no</code></p>
-
-<p>If the line doesn’t exist, make it.</p>
-
-<p>Optionally change the Port in the same file. If you do this, it might be a good idea to change the port value in <code class="highlighter-rouge">ssh_config</code> on the machine you use to connect as well.  This saves you from having to specify the port every time with <code class="highlighter-rouge">ssh -p</code>.</p>
-
-<p>To see the impact of these changes, restart ssh on the remote machine:</p>
-
-<p><code class="highlighter-rouge">sudo service ssh restart</code></p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/01/06/first-post/">
-        First Post
-      </a>
-    </h1>
-
-    <span class="post-date">06 Jan 2015</span>
-
-    <p>This is my first post.  I’m mostly going to be talking about programming (I like <a href="http://clojure.org">Clojure</a>), and doing programming challenges.</p>
-
-<p>I’m a software developer at <a href="http://www.paychex.com">Paychex</a> in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET.  I work mostly in the back end on our money transmission and filing infrastructure.</p>
-
-  </div>
-  
 </div>
 
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
-    <span class="pagination-item newer">Newer</span>
-  
-</div> -->
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2018/04/09/my-first-5-years-as-a-professional-software-engineer/">
+            My First 5 years as a Software Engineer
+            <small>09 Apr 2018</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/02/02/setting-up-ssh/">
+            Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox
+            <small>02 Feb 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/01/06/first-post/">
+            First Post
+            <small>06 Jan 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
 
       </div>
     </div>
