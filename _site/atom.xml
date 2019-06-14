@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Tom George</title>
-<link href="http://0.0.0.0:4000/atom.xml" rel="self"/>
-<link href="http://0.0.0.0:4000/"/>
- <updated>2018-04-09T19:13:37-04:00</updated>
-<id>http://0.0.0.0:4000</id>
+<link href="http://localhost:4000/atom.xml" rel="self"/>
+<link href="http://localhost:4000/"/>
+ <updated>2019-06-06T16:34:26-05:00</updated>
+<id>http://localhost:4000</id>
  <author>
    <name>Tom George</name>
    <email>tg82490@gmail.com</email>
@@ -13,10 +13,45 @@
 
  
  <entry>
+   <title>I Got the Diabeetus</title>
+ <link href="http://localhost:4000/2019/06/06/2019-015-27-i-got-the-diabeetus/"/>
+   <updated>2019-06-06T16:34:26-05:00</updated>
+ <id>http://localhost:4000/2019/06/06/2019-015-27-i-got-the-diabeetus</id>
+   <content type="html">&lt;h2 id=&quot;or-i-dont-know-how-to-listen-to-my-body&quot;&gt;Or, I Don’t Know How to Listen to My Body&lt;/h2&gt;
+
+&lt;p&gt;In February of 2017, I was diagnosed with Type 1 Diabetes.  Which was pretty weird, as I was 26 years old at the time.  Type 1 Diabetes is often referred to as “Juvenile Diabetes”, so I kind of figured I was out of the woods.  I was also pretty oblivious, and tended to ignore or minimize issues that I was having.&lt;/p&gt;
+
+&lt;p&gt;There were plenty of signs, though.  I would wake up in the middle of the night multiple times to pee.  “Eh, you’re getting older,” I would think, because it’s normal for a 25-year old man to have to pee 4 times a night. I was constantly thirsty, and always tired.  “Well, I &lt;em&gt;am&lt;/em&gt; burning the candle at both ends.  I just need to take a vacation.”  I started seeing little floaters in my eyes that kind of looked like a cracked piece of glass.  “Whatever, I just need glasses now.  You can’t have 20/20 vision forever!”&lt;/p&gt;
+
+&lt;p&gt;This went on for months.&lt;/p&gt;
+
+&lt;p&gt;I started to get alarmed when I would lay down to go to bed,  and notice that my feet felt dry.  Then they started feeling hot.  Eventually, I started getting random pains in my feet and shins:  burning, stinging, stabbing, freezing, or feeling like I had just broken a toe.  The foot pain had stopped becoming a before-bed issue, and started to bother me at work.&lt;/p&gt;
+
+&lt;p&gt;I remember one day I typed my symptoms into Web MD.  This is a &lt;strong&gt;&lt;em&gt;terrible&lt;/em&gt;&lt;/strong&gt; idea 99% of the time, but it actually turned out to be helpful.  The foot pain symptoms sounded a lot like neuropathy, according to Web MD, and it advised me that I either had Diabetes or MS.&lt;/p&gt;
+
+&lt;p&gt;The final straw came the weekend before I was diagnosed.  I had gone to bed on a Friday at 11 PM, and woke up the next day at 1 PM, feeling the opposite of rested.  I had some “breakfast”, a bowl of (sugary) cereal with milk, and felt terribly lethargic about 30 minutes later.   I went back to my room to lay down, and woke up 7 hours later.&lt;/p&gt;
+
+&lt;p&gt;So, resolute in my self-diagnosis, I set up an appointment with my doctor.  I told him about my issues with my feet, without ever mentioning my thirst, lethargy, or gratuitous nocturnal urination.  I still hadn’t connected those dots.  My doctor thought that maybe I had pinched a nerve in my leg.  That didn’t really make sense to me, because I was experiencing pain in both feet.  If I had pinched a nerve in my leg, why would the foot on the other leg bother me?&lt;/p&gt;
+
+&lt;p&gt;I asked for a diabetes test, and my doctor said, “You don’t have diabetes.”  I pushed back on that, and insisted that I get the test.  I went to a lab, and took a blood test called an &lt;a href=&quot;https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis/a1c-test&quot;&gt;A1C&lt;/a&gt;, which is a measurement of the percentage of hemoglobin in your blood that has glucose bound to it.  These cells tend to die and get switched out with new ones every 90 days, so the A1C is used to see how well diabetics have been doing over the past 3 months.  A normal A1C is between 4 and 6 percent.  Mine was 15.8.  Almost one fifth of the hemoglobin in my blood was lucky charms.  I got a call from the receptionist at my doctor’s office:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Hi, Mr. George, this is $NAME from $DOCTORS_OFFICE.  Your A1C results came back.  It was a 15.8, which is quite high.  Would you be available to come in tomorrow?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;As if the nightly rotation to the bathroom, deteriorating eyesight, unexplained nerve pain, and the gold standard diabetes test wasn’t enough, after I got off the phone I googled “things that can make your A1C high that aren’t diabetes.”  I didn’t get a whole lot of results back.  Bummer.&lt;/p&gt;
+
+&lt;p&gt;I called my Aunt, who has been a Type 1 Diabetic since she was 14, and told her what my results had been.  She thought that I should go to the emergency room immediately, and not wait another day, as I was likely in a &lt;a href=&quot;https://medlineplus.gov/ency/article/000320.htm&quot;&gt;ketoacidotic&lt;/a&gt; state.  Diabetic Ketoacidosis is a life-threatening condition where, much like ketosis, the body gives up on burning carbohydrates as fuel and switches to ketone bodies.  This, much like the “Acidosis” name suggests, causes your blood to become acidic, and damages just about every organ system in your body.  After I got off the phone with my Aunt, I called my parents, who also wanted me to go to the emergency room, and not wait for the doctor’s appointment the next day.  My roommate went with me, and we set off into the night.&lt;/p&gt;
+
+&lt;p&gt;When I got to the ER, there were about 25 people in the waiting room.  I was pretty annoyed&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>My First 5 years as a Software Engineer</title>
- <link href="http://0.0.0.0:4000/2018/04/09/my-first-5-years-as-a-professional-software-engineer/"/>
-   <updated>2018-04-09T00:00:00-04:00</updated>
- <id>http://0.0.0.0:4000/2018/04/09/my-first-5-years-as-a-professional-software-engineer</id>
+ <link href="http://localhost:4000/2018/04/09/my-first-5-years-as-a-professional-software-engineer/"/>
+   <updated>2018-04-09T00:00:00-05:00</updated>
+ <id>http://localhost:4000/2018/04/09/my-first-5-years-as-a-professional-software-engineer</id>
    <content type="html">&lt;p&gt;lol I’m a weiner&lt;/p&gt;
 
 </content>
@@ -24,9 +59,9 @@
  
  <entry>
    <title>Testing Clojurescript web apps with clj-webdriver</title>
- <link href="http://0.0.0.0:4000/2015/09/17/testing_web_pages_with_clj_webdriver/"/>
-   <updated>2015-09-17T00:00:00-04:00</updated>
- <id>http://0.0.0.0:4000/2015/09/17/testing_web_pages_with_clj_webdriver</id>
+ <link href="http://localhost:4000/2015/09/17/testing_web_pages_with_clj_webdriver/"/>
+   <updated>2015-09-17T00:00:00-05:00</updated>
+ <id>http://localhost:4000/2015/09/17/testing_web_pages_with_clj_webdriver</id>
    <content type="html">&lt;p&gt;This post describes how to get up and running with Selenium and automating browser testing in Clojure with &lt;a href=&quot;https://github.com/semperos/clj-webdriver&quot;&gt;clj-webdriver&lt;/a&gt;.  I’m assuming leiningen, but if you use Boot or Gradle or something I think idea is pretty much the same.&lt;/p&gt;
 
 &lt;p&gt;I’ve been working on a side project for work because I think the way we do some of our data setup and testing could be better, and I really want to do something substantial with Clojure and Clojurescript.  This project is a set of tools that will insert random data into an Oracle database based on the values in the Oracle data dictionary.  You can also specify your own values, which you probably will want to do at some point (just using randomly generated data is pointless as far as I can tell).  The cool part (I think) is that you can specify what kind of random data you want using a set of &lt;a href=&quot;http://github.com/edn-format/edn&quot;&gt;edn&lt;/a&gt; tagged values that I made handlers for, but that’s probably a post for another day.&lt;/p&gt;
@@ -111,9 +146,9 @@
  
  <entry>
    <title>Beating a Dead Horse&#58  Setting up SSH on Debian in VirtualBox</title>
- <link href="http://0.0.0.0:4000/2015/02/02/setting-up-ssh/"/>
-   <updated>2015-02-02T00:00:00-05:00</updated>
- <id>http://0.0.0.0:4000/2015/02/02/setting-up-ssh</id>
+ <link href="http://localhost:4000/2015/02/02/setting-up-ssh/"/>
+   <updated>2015-02-02T00:00:00-06:00</updated>
+ <id>http://localhost:4000/2015/02/02/setting-up-ssh</id>
    <content type="html">&lt;p&gt;This is the first post in my “Beating a Dead Horse” series, where I make a tutorial on something that really doesn’t need another tutorial.&lt;/p&gt;
 
 &lt;p&gt;The title says, “Setting up SSH on Debian in VirtualBox”, but the basic idea is the same everywhere.  I want to walk you through how I set up ssh public-key authentication on my VirtualBox dev server.  I also set up port forwarding, allowing me to access the server through the public internet, which I may cover in a later post.&lt;/p&gt;
@@ -180,9 +215,9 @@
  
  <entry>
    <title>First Post</title>
- <link href="http://0.0.0.0:4000/2015/01/06/first-post/"/>
-   <updated>2015-01-06T00:00:00-05:00</updated>
- <id>http://0.0.0.0:4000/2015/01/06/first-post</id>
+ <link href="http://localhost:4000/2015/01/06/first-post/"/>
+   <updated>2015-01-06T00:00:00-06:00</updated>
+ <id>http://localhost:4000/2015/01/06/first-post</id>
    <content type="html">&lt;p&gt;This is my first post.  I’m mostly going to be talking about programming (I like &lt;a href=&quot;http://clojure.org&quot;&gt;Clojure&lt;/a&gt;), and doing programming challenges.&lt;/p&gt;
 
 &lt;p&gt;I’m a software developer at &lt;a href=&quot;http://www.paychex.com&quot;&gt;Paychex&lt;/a&gt; in frigid Rochester, NY.  I work in a whole bunch of technologies, including C, Java, and .NET.  I work mostly in the back end on our money transmission and filing infrastructure.&lt;/p&gt;
